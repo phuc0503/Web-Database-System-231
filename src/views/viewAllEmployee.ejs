@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quản Lý Nhà Hàng</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+</head>
+
+<body>
+    
+    <div class="container-fluid">
+        <div class="row flex-nowrap">
+            <!-- Sidebar -->
+            <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
+                <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+                    <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                        <span class="fs-5 d-none d-sm-inline">Gordon Restaurant</span>
+                    </a>
+                    <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+                        <li>
+                            <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+                                <i class="fs-4 bi-journal-text"></i> <span class="ms-1 d-none d-sm-inline">Menu</span> </a>
+                            <ul class="collapse nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
+                                <li class="w-100">
+                                    <a href="/food-and-drink" class="nav-link px-0 "> <span class="d-none d-sm-inline">Food and drink</span></a>
+                                </li>
+                                <li>
+                                    <a href="/food" class="nav-link px-0"> <span class="d-none d-sm-inline">Món ăn</span></a>
+                                </li>
+                                <li>
+                                    <a href="/drink" class="nav-link px-0"> <span class="d-none d-sm-inline">Đồ uống</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+                                <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Nhân viên</span> </a>
+                            <ul class="collapse nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
+                                <li class="w-100">
+                                    <a href="/employee" class="nav-link px-0 "> <span class="d-none d-sm-inline">Tất cả nhân viên</span></a>
+                                </li>
+                                <li>
+                                    <a href="/chef" class="nav-link px-0"> <span class="d-none d-sm-inline">Đầu bếp</span></a>
+                                </li>
+                                <li>
+                                    <a href="/waiter" class="nav-link px-0"> <span class="d-none d-sm-inline">Phục vụ</span></a>
+                                </li>
+                                <li>
+                                    <a href="/cashier" class="nav-link px-0"> <span class="d-none d-sm-inline">Thu ngân</span></a>
+                                </li>
+                            </ul>
+                            <!-- <a href="/employee" class="nav-link px-0 align-middle">
+                                <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Nhân viên phục vụ</span></a> -->
+                        </li>
+                        
+                        <li>
+                            <a href="/bestseller" class="nav-link px-0 align-middle">
+                                <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Bestseller</span> </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- End sidebar -->
+
+            <div class="col-10 py-3">
+                <h2>Danh Sách Nhân Viên</h2>
+                <div class="col-md-12 mt-3">
+                    <!-- <div class="card mt-4"> -->
+                        <table id="employee" class="table table-bordered mt-4 display nowrap">
+                            <thead >
+                                <tr>
+                                    <th>Mã nhân viên</th>
+                                    <th>Họ & Tên Nhân viên</th>
+                                    <th>Giới tính</th>
+                                    <th>Ngày sinh</th>
+                                    <th>Địa chỉ</th>
+                                    <th>Ngày bắt đầu làm</th>
+                                    <th>Tài khoản ngân hàng</th>
+                                    <th>Bằng cấp</th>
+                                    <th>Lương theo tháng</th>
+                                    <th>Lương theo giờ</th>
+                                    <th>Mã nhân viên quản lý</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% emp.forEach(function(employee) { %>
+                                <tr>
+                                    <td><%= employee.MANHANVIEN %></td>
+                                    <td><%= employee.HOTEN %></td>
+                                    <td><%= employee.GIOITINH %></td>
+                                    <td><%= employee.NGAYSINH.toLocaleDateString() %></td>
+                                    <td><%= employee.DIACHI %></td>
+                                    <td><%= employee.NGAYBATDAULAM.toLocaleDateString() %></td>
+                                    <td><%= employee.TKNGANHANG %></td>
+                                    <td><%= employee.BANGCAP %></td>
+                                    <td><%= employee.LUONGTHEOTHANG %></td>
+                                    <td><%= employee.LUONGTHEOGIO %></td>
+                                    <td><%= employee.MANVQUANLY %></td>
+
+                                </tr>
+                                <%  }); %>
+                            </tbody>
+                        </table>
+                    <!-- </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src=" https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+   <script>
+    new DataTable('#employee', {
+        search: {
+            return: true
+        },
+        lengthChange: false,
+        paging: false,
+        info: false,
+        scrollX: true
+    });
+   
+   </script>
+
+</body>
+</html>

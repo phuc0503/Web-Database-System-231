@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quản Lý Nhà Hàng</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <!-- <link rel="stylesheet" type="text/css" href="/style.css" /> -->
+</head>
+<style>
+    .alert-container{
+        position:absolute;
+        top:0;
+        right:20px;
+    }
+</style>
+<body>
+    <% if(errMessage.length > 0) { %>
+        <div class="alert-container mt-1">
+            <div class="alert alert-danger alert-dismissible fade show" id="alert2" role="alert">
+                <%= errMessage %>
+                <button type="button" class="btn-close" id="close2" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    <% } %>
+    <div class="container-fluid">
+        <div class="row flex-nowrap">
+            <!-- Sidebar -->
+            <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
+                <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+                    <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                        <span class="fs-5 d-none d-sm-inline">Gordon Restaurant</span>
+                    </a>
+                    <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+                        <li>
+                            <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+                                <i class="fs-4 bi-journal-text"></i> <span class="ms-1 d-none d-sm-inline">Menu</span> </a>
+                            <ul class="collapse nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
+                                <li class="w-100">
+                                    <a href="/food-and-drink" class="nav-link px-0 "> <span class="d-none d-sm-inline">Food and drink</span></a>
+                                </li>
+                                <li>
+                                    <a href="/food" class="nav-link px-0"> <span class="d-none d-sm-inline">Món ăn</span></a>
+                                </li>
+                                <li>
+                                    <a href="/drink" class="nav-link px-0"> <span class="d-none d-sm-inline">Đồ uống</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+                                <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Nhân viên</span> </a>
+                            <ul class="collapse nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
+                                <li class="w-100">
+                                    <a href="/employee" class="nav-link px-0 "> <span class="d-none d-sm-inline">Tất cả nhân viên</span></a>
+                                </li>
+                                <li>
+                                    <a href="/chef" class="nav-link px-0"> <span class="d-none d-sm-inline">Đầu bếp</span></a>
+                                </li>
+                                <li>
+                                    <a href="/waiter" class="nav-link px-0"> <span class="d-none d-sm-inline">Phục vụ</span></a>
+                                </li>
+                                <li>
+                                    <a href="/cashier" class="nav-link px-0"> <span class="d-none d-sm-inline">Thu ngân</span></a>
+                                </li>
+                            </ul>
+                            <!-- <a href="/employee" class="nav-link px-0 align-middle">
+                                <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Nhân viên phục vụ</span></a> -->
+                        </li>
+                        
+                        <li>
+                            <a href="/bestseller" class="nav-link px-0 align-middle">
+                                <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Bestseller</span> </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- End sidebar -->
+
+            <div class="col py-3">
+                <div class="card mt-5">
+                    <div class="card-header">
+                        <h4>Món ăn được mua nhiều nhất theo quý và năm</h4>
+                    </div>
+                    <div class="card-body">
+                        <form class="needs-validation" action="/bestseller" method="GET" novalidate>
+                            <div class="row">
+                                <div class="col-5">
+                                    <!-- <input type="text" class="form-control" name="quarter" placeholder="Quý"> -->
+                                    <select class="form-select" name="quarter" aria-label="Quý" placeholder="Quý" required>
+                                        <option selected disabled hidden value="">Quý</option>
+                                        <option value="1">Quý 1</option>
+                                        <option value="2">Quý 2</option>
+                                        <option value="3">Quý 3</option>
+                                        <option value="4">Quý 4</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Vui lòng điền quý.
+                                    </div>
+                                </div>
+                                <div class="col-5">
+                                    <input type="text" class="form-control" name="year" placeholder="Năm" required>
+                                    <div class="invalid-feedback">
+                                        Vui lòng điền năm.
+                                    </div>
+                                </div>
+                                <div class="col-2">
+                                    <button type="button submit" id="submit" class="btn btn-primary">Tìm kiếm</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="card mt-4">
+                        <table class="table table-bordered">
+                            <thread>
+                                <tr>
+                                    <th>Năm</th>
+                                    <th>Quý</th>
+                                    <th>Tên</th>
+                                    <th>Tổng lượt mua</th>
+                                    <th>Tổng doanh thu</th>
+                                </tr>
+                            </thread>
+                            <tbody>
+                                    <tr>
+                                        <% food.forEach(function(bestsellerFood){ %>
+                                        <td><%= bestsellerFood.NAM %></td>
+                                        <td><%= bestsellerFood.QUY %></td>
+                                        <td><%= bestsellerFood.TEN %></td>
+                                        <td><%= bestsellerFood.TONGLUOTMUA %></td>
+                                        <td><%= bestsellerFood.TONGDOANHTHU %></td>
+    
+                                        <% }); %>
+                                    </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <script>
+        function vanish(){
+        $('#alert2').fadeOut('fast');
+        }
+        
+        $(document).ready(function () {   
+            setTimeout(function () {
+            vanish()
+            }, 2000);
+        });
+
+        (() => {
+            'use strict'
+
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            const forms = document.querySelectorAll('.needs-validation')
+
+            // Loop over them and prevent submission
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+
+                form.classList.add('was-validated')
+                }, false)
+            })
+        })()
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+</html>

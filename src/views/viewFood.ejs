@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quản Lý Nhà Hàng</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+</head>
+<style>
+    .alert-container{
+        position:absolute;
+        top:0;
+        right:20px;
+    }
+</style>
+<body>
+    <% if(errMessage.length > 0) { %>
+        <div class="alert-container mt-2">
+            <div class="alert alert-danger alert-dismissible fade show" id="alert2" role="alert">
+                <%= errMessage %>
+                <button type="button" class="btn-close" id="close2" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    <% } %>
+    <div class="container-fluid">
+        <div class="row flex-nowrap">
+        <!-- Sidebar -->
+        <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
+            <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+                <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                    <span class="fs-5 d-none d-sm-inline">Gordon Restaurant</span>
+                </a>
+                <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+                    <li>
+                        <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+                            <i class="fs-4 bi-journal-text"></i> <span class="ms-1 d-none d-sm-inline">Menu</span> </a>
+                        <ul class="collapse nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
+                            <li class="w-100">
+                                <a href="/food-and-drink" class="nav-link px-0 "> <span class="d-none d-sm-inline">Food and drink</span></a>
+                            </li>
+                            <li>
+                                <a href="/food" class="nav-link px-0"> <span class="d-none d-sm-inline">Món ăn</span></a>
+                            </li>
+                            <li>
+                                <a href="/drink" class="nav-link px-0"> <span class="d-none d-sm-inline">Đồ uống</span></a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+                            <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Nhân viên</span> </a>
+                        <ul class="collapse nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
+                            <li class="w-100">
+                                <a href="/employee" class="nav-link px-0 "> <span class="d-none d-sm-inline">Tất cả nhân viên</span></a>
+                            </li>
+                            <li>
+                                <a href="/chef" class="nav-link px-0"> <span class="d-none d-sm-inline">Đầu bếp</span></a>
+                            </li>
+                            <li>
+                                <a href="/waiter" class="nav-link px-0"> <span class="d-none d-sm-inline">Phục vụ</span></a>
+                            </li>
+                            <li>
+                                <a href="/cashier" class="nav-link px-0"> <span class="d-none d-sm-inline">Thu ngân</span></a>
+                            </li>
+                        </ul>
+                        <!-- <a href="/employee" class="nav-link px-0 align-middle">
+                            <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Nhân viên phục vụ</span></a> -->
+                    </li>
+                    
+                    <li>
+                        <a href="/bestseller" class="nav-link px-0 align-middle">
+                            <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Bestseller</span> </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- End sidebar -->
+        <div class="col py-3">
+            <h2>Danh Sách Món Ăn</h2>
+        <!-- <a class="btn btn-primary" style="--bs-btn-font-size: 1.2rem;" role="button">THÊM</a> -->
+        <!-- Button trigger modal -->
+        <div class="row justify-content-between">
+            <div class="col-4">
+                <form action="/food" method="GET">
+                    <div class="row">
+                        <div class="col-5">
+                            <select class="form-select" name="orderBy"  placeholder="orderBy">
+                                <option value="TEN" hidden>Sắp xếp theo</option>
+                                <option value="TEN">Tên món</option>
+                                <option value="CACHCHEBIEN">Cách chế biến</option>
+                            </select>
+                        </div>
+
+                        <div class="col-4">
+                            <select class="form-select" name="orderDir" placeholder="orderDir">
+                                <option value="ASC" hidden>Thứ tự</option>
+                                <option value="ASC">Tăng dần</option>
+                                <option value="DESC">Giảm dần</option>
+                            </select>
+                            
+                        </div>
+                        
+                        <div class="col-3">
+                            <button type="button submit" id="submit" class="btn btn-primary">Sắp xếp</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Search box -->
+            <form class="col-6" action="/food" method="GET">
+                <div class="row">
+                    <div class="col-6">
+                        <input type="text" class="form-control" name="search" placeholder="Tìm kiếm">
+                    </div>
+                    <div class="col-6">
+                        <button type="button submit" id="submit1" class="btn btn-primary">Tìm kiếm</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <br>
+        <table class="table table-striped text-center">
+            <thread>
+                <tr class="table-dark">
+                    <th>Tên</th>
+                    <th>Version</th>
+                    <th>Cách chế biến</th>
+                    <th>Cảnh báo dị ứng</th>
+                </tr>
+            </thread>
+            <tbody class="table-group-divider">
+                <% listMenu.forEach(function(menu) { %>
+                    <tr>
+                        <td><%= menu.TEN %></td>
+                        <td><%= menu.VERSION %></td>
+                        <td><%= menu.CACHCHEBIEN %></td>
+                        <td><%= menu.CANHBAODIUNG %></td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <% if(page > 1) { %>
+                <li class="page-item"><a class="page-link" href="/food?page=<%=page-1%>&orderBy=<%=orderBy%>&orderDir=<%=orderDir%>" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+                <% } %>
+                <% for(let i = iterator; i <= endingLink; i++) { %>
+                <% if(i === page) { %>
+                <li class="page-item " aria-current="page"><a class="page-link" href="/food?page=<%=i%>&orderBy=<%=orderBy%>&orderDir=<%=orderDir%>"><%= i %></a></li>
+                <% continue; %>
+                <% } %>
+                <li class="page-item"><a class="page-link" href="/food?page=<%=i%>&orderBy=<%=orderBy%>&orderDir=<%=orderDir%>"><%= i %></a></li>
+                <% } %>
+                <% if(page < numOfPages) { %> <li class="page-item"><a class="page-link" href="/food?page=<%=page-1+2%>&orderBy=<%=orderBy%>&orderDir=<%=orderDir%>" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li> <% } %>
+            </ul>
+        </nav>
+    </div>
+    <script>
+        function vanish(){
+        $('#alert2').fadeOut('fast');
+       }
+      
+       $(document).ready(function () {   
+         setTimeout(function () {
+           vanish()
+         }, 2000);
+       });
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    
+</body>
+</html>

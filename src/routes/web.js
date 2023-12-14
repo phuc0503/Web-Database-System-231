@@ -1,0 +1,20 @@
+const express = require('express');
+const router = express.Router();
+const { getUsers, getFoodAndDrink, getAddPage, postAddFoodAndDrink, getUpdatePage, postUpdateFoodAndDrink, postDeleteFoodAndDrink, getFood, getDrink, getAllEmployee, getChef, getFindWaiter, getCashier, getBestSellerFood, getFoodAndDrinkQuery } = require('../controllers/homeController');
+
+router.get('/', getUsers);
+router.get('/food-and-drink', getFoodAndDrink);
+router.get('/add', getAddPage);
+router.post('/add-food-and-drink', postAddFoodAndDrink);
+router.get('/update', getUpdatePage);
+router.post('/update-food-and-drink', postUpdateFoodAndDrink);
+router.post('/delete-food-and-drink', postDeleteFoodAndDrink);
+router.get('/food', getFood);
+router.get('/drink', getDrink);
+router.get('/bestseller', getBestSellerFood);
+router.get('/test', getFoodAndDrinkQuery);
+router.get('/employee', getAllEmployee);
+router.get('/chef', getChef);
+router.get('/waiter', getFindWaiter);
+router.get('/cashier', getCashier);
+module.exports = router;

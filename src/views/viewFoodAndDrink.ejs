@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quản Lý Nhà Hàng</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+</head>
+
+<style>
+    .alert-container{
+        position:absolute;
+        top:0;
+        right:20px;
+    }
+</style>
+<body>
+    <% if(message.length > 0) { %>
+        <div class="alert-container mt-1">
+            <div class="alert alert-success alert-dismissible fade show" id="alert1" role="alert">
+                <%= message %>
+                <button type="button" class="btn-close" id="close1" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    <% } %>
+
+    <% if(errMessage.length > 0) { %>
+        <div class="alert-container mt-1">
+            <div class="alert alert-danger alert-dismissible fade show" id="alert2" role="alert">
+                <%= errMessage %>
+                <button type="button" class="btn-close" id="close2" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    <% } %>
+    <div class="container-fluid">
+        <div class="row flex-nowrap">
+            <!-- Sidebar -->
+            <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
+                <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+                    <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                        <span class="fs-5 d-none d-sm-inline">Gordon Restaurant</span>
+                    </a>
+                    <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+                        <li>
+                            <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+                                <i class="fs-4 bi-journal-text"></i> <span class="ms-1 d-none d-sm-inline">Menu</span> </a>
+                            <ul class="collapse nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
+                                <li class="w-100">
+                                    <a href="/food-and-drink" class="nav-link px-0 "> <span class="d-none d-sm-inline">Food and drink</span></a>
+                                </li>
+                                <li>
+                                    <a href="/food" class="nav-link px-0"> <span class="d-none d-sm-inline">Món ăn</span></a>
+                                </li>
+                                <li>
+                                    <a href="/drink" class="nav-link px-0"> <span class="d-none d-sm-inline">Đồ uống</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+                                <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Nhân viên</span> </a>
+                            <ul class="collapse nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
+                                <li class="w-100">
+                                    <a href="/employee" class="nav-link px-0 "> <span class="d-none d-sm-inline">Tất cả nhân viên</span></a>
+                                </li>
+                                <li>
+                                    <a href="/chef" class="nav-link px-0"> <span class="d-none d-sm-inline">Đầu bếp</span></a>
+                                </li>
+                                <li>
+                                    <a href="/waiter" class="nav-link px-0"> <span class="d-none d-sm-inline">Phục vụ</span></a>
+                                </li>
+                                <li>
+                                    <a href="/cashier" class="nav-link px-0"> <span class="d-none d-sm-inline">Thu ngân</span></a>
+                                </li>
+                            </ul>
+                            <!-- <a href="/employee" class="nav-link px-0 align-middle">
+                                <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Nhân viên phục vụ</span></a> -->
+                        </li>
+                        
+                        <li>
+                            <a href="/bestseller" class="nav-link px-0 align-middle">
+                                <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Bestseller</span> </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- End sidebar -->
+
+            <div class="col py-3">
+                <h2>Danh Sách Món Ăn Và Đồ Uống</h2>
+
+                <div class="row justify-content-between mt-3">
+                    <div class="col-2">
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            Thêm
+                        </button>
+                    </div>
+                    <div class="col-4">
+                        <form action="/food-and-drink" method="GET">
+                            <div class="row">
+                                <div class="col-5">
+                                    <select class="form-select" name="orderBy"  placeholder="orderBy">
+                                        <option value="TEN" hidden>Sắp xếp theo</option>
+                                        <option value="TEN">Tên món</option>
+                                        <option value="GIA">Giá</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-4">
+                                    <select class="form-select" name="orderDir" placeholder="orderDir">
+                                        <option value="ASC" hidden>Thứ tự</option>
+                                        <option value="ASC">Tăng dần</option>
+                                        <option value="DESC">Giảm dần</option>
+                                    </select>
+                                    
+                                </div>
+                                
+                                <div class="col-3">
+                                    <button type="button submit" id="submit" class="btn btn-primary">Sắp xếp</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <!-- Search box -->
+                    <form class="col-6" action="/food-and-drink" method="GET">
+                        <div class="row">
+                            <div class="col-6">
+                                <input type="text" class="form-control" name="search" placeholder="Tìm kiếm">
+                            </div>
+                            <div class="col-6">
+                                <button type="button submit" id="submit1" class="btn btn-primary">Tìm kiếm</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Bạn muốn thêm món ăn hay đồ uống?</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#foodModal">
+                                Món ăn
+                            </button>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#drinkModal">
+                                Đồ uống
+                            </button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <!--add food Modal -->
+                <div class="modal fade" id="foodModal" tabindex="-1" aria-labelledby="foodModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="foodModalLabel">Thêm món ăn</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="needs-validation" action="/add-food-and-drink" method="POST" novalidate >
+                                <div class="row mb-3">
+                                    <div class="col-6">
+                                        <div class="form-floating">
+                                            <input  type="text" class="form-control" placeholder="f&dname" name="name" required/>
+                                            <label for="name">Tên món ăn</label>
+                                            <div class="invalid-feedback">
+                                                Vui lòng điền tên món ăn.
+                                            </div>
+                                            <div class="valid-feedback">
+                                                OK.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="form-floating">
+                                            <input  type="text" class="form-control" placeholder="f&dversion" name="version" required/>
+                                            <label for="version">Version</label>
+                                            <div class="invalid-feedback">
+                                                Vui lòng điền version món ăn.
+                                            </div>
+                                            <div class="valid-feedback">
+                                                OK.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="form-floating">
+                                            <input  type="number" class="form-control" min="1" placeholder="f&dprice" name="price" required/>
+                                            <label for="price">Giá</label>
+                                            <div class="invalid-feedback">
+                                                Vui lòng điền giá.
+                                            </div>
+                                            <div class="valid-feedback">
+                                                OK.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>    
+                                <div class="row mb-3">
+                                    <div class="col-7">
+                                        <div class="form-floating">
+                                            <input  type="text" class="form-control" placeholder="f&dingredient" name="ingredient" required/>
+                                            <label for="ingredient">Nguyên liệu</label>
+                                            <div class="invalid-feedback">
+                                                Vui lòng điền nguyên liệu món ăn.
+                                            </div>
+                                            <div class="valid-feedback">
+                                                OK.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-5">
+                                        <div class="form-floating">
+                                            <input  type="text" class="form-control" placeholder="f&ddescription" name="description" required/>
+                                            <label for="description">Mô tả</label>
+                                            <div class="invalid-feedback">
+                                                Vui lòng điền mô tả món ăn.
+                                            </div>
+                                            <div class="valid-feedback">
+                                                OK.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-4">
+                                        <div class="form-floating">
+                                            <input  type="text" class="form-control" placeholder="f&dtype" name="type" value="Món ăn" readonly/>
+                                            <label for="type">Loại</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-4">
+                                        <div class="form-floating">
+                                            <input  type="text" class="form-control" placeholder="f&ddate" name="date" value="<%= new Date().toLocaleDateString() %>" readonly/>
+                                            <label for="date">Ngày thêm</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-4">
+                                        <div class="form-floating">
+                                            <input  type="text" class="form-control" placeholder="f&dstate" name="state" required/>
+                                            <label for="state">Tình trạng</label>
+                                            <div class="invalid-feedback">
+                                                Vui lòng điền tình trạng món ăn.
+                                            </div>
+                                            <div class="valid-feedback">
+                                                OK.
+                                            </div>
+                                        </div>
+                                    </div>    
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <input  type="text" class="form-control" placeholder="f&dallergy" name="allergy" required/>
+                                            <label for="allergy">Cảnh báo dị ứng</label>
+                                            <div class="invalid-feedback">
+                                                Vui lòng điền cảnh báo dị ứng.
+                                            </div>
+                                            <div class="valid-feedback">
+                                                OK.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class=" mb-3">    
+                                    <textarea class="form-control" name="recipe" id="recipe" placeholder="Cách chế biến"  rows="5" required></textarea>
+                                    <div class="invalid-feedback">
+                                        Vui lòng điền cách chế biến món ăn.
+                                    </div>
+                                    <div class="valid-feedback">
+                                        OK.
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button submit" id="submit" class="btn btn-primary">Thêm</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <!--add drink Modal -->
+                <div class="modal fade" id="drinkModal" tabindex="-1" aria-labelledby="drinkModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="drinkModalLabel">Thêm đồ uống</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="needs-validation" action="/add-food-and-drink" method="POST" novalidate>
+                                <div class="row mb-3">
+                                    <div class="col-6">
+                                        <div class="form-floating">
+                                            <input  type="text" class="form-control" placeholder="f&dname" name="name" required>
+                                            <label for="name">Tên đồ uống</label>
+                                            <div class="invalid-feedback">
+                                                Vui lòng điền tên đồ uống.
+                                            </div>
+                                            <div class="valid-feedback">
+                                                OK.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="form-floating">
+                                            <input  type="text" class="form-control" placeholder="f&dversion" name="version" required>
+                                            <label for="version">Version</label>
+                                            <div class="invalid-feedback">
+                                                Vui lòng điền version đồ uống.
+                                            </div>
+                                            <div class="valid-feedback">
+                                                OK.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="form-floating">
+                                            <input  type="number"  min="1" class="form-control" placeholder="f&dprice" name="price" required>
+                                            <label for="price">Giá</label>
+                                            <div class="invalid-feedback">
+                                                Vui lòng điền giá.
+                                            </div>
+                                            <div class="valid-feedback">
+                                                OK.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>    
+                                <div class="row mb-3">
+                                    <div class="col-7">
+                                        <div class="form-floating">
+                                            <input  type="text" class="form-control" placeholder="f&dingredient" name="ingredient" required>
+                                            <label for="ingredient">Nguyên liệu</label>
+                                            <div class="invalid-feedback">
+                                                Vui lòng điền nguyên liệu đồ uống.
+                                            </div>
+                                            <div class="valid-feedback">
+                                                OK.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-5">
+                                        <div class="form-floating">
+                                            <input  type="text" class="form-control" placeholder="f&ddescription" name="description" required>
+                                            <label for="description">Mô tả</label>
+                                            <div class="invalid-feedback">
+                                                Vui lòng điền mô tả đồ uống.
+                                            </div>
+                                            <div class="valid-feedback">
+                                                OK.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-3">
+                                        <div class="form-floating">
+                                            <input  type="text" class="form-control" placeholder="f&dtype" name="type" value="Đồ uống" readonly>
+                                            <label for="type">Loại</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-3">
+                                        <div class="form-floating">
+                                            <input  type="text" class="form-control" placeholder="f&ddate" name="date" value="<%= new Date().toLocaleDateString() %>" readonly>
+                                            <label for="date">Ngày thêm</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-3">
+                                        <div class="form-floating">
+                                            <input  type="text" class="form-control" placeholder="f&dstate" name="state" required>
+                                            <label for="state">Tình trạng</label>
+                                            <div class="invalid-feedback">
+                                                Vui lòng điền tình trạng đồ uống.
+                                            </div>
+                                            <div class="valid-feedback">
+                                                OK.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-3">
+                                        <div class="form-floating">
+                                            <input  type="text" class="form-control" placeholder="f&dorigin" name="origin" required>
+                                            <label for="origin">Xuất xứ</label>
+                                            <div class="invalid-feedback">
+                                                Vui lòng điền xuất xứ đồ uống.
+                                            </div>
+                                            <div class="valid-feedback">
+                                                OK.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button submit" id="submit" class="btn btn-primary">Thêm</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <!-- Food and drink table -->
+                <br>
+                <table  class="table table-striped text-center">
+                    <thead>
+                        <tr class="table-dark">
+                            <th>Tên</th>
+                            <th>Version</th>
+                            <th>Giá</th>
+                            <th>Nguyên liệu</th>
+                            <th>Mô tả</th>
+                            <th>Ngày thêm</th>
+                            <th>Tình trạng</th>
+                            <th>Yêu thích</th>
+                            <th>Tuỳ chỉnh</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% listMenu.forEach(function(menu) { %>
+                            <tr class="align-middle">
+                                <td><%= menu.TEN %></td>
+                                <td><%= menu.VERSION %></td>
+                                <td><%= menu.GIA %></td>
+                                <td><%= menu.NGUYENLIEU %></td>
+                                <td><%= menu.MOTA %></td>
+                                <td><%= menu.NGAYTHEM.toLocaleDateString() %></td>
+                                <td><%= menu.TINHTRANG %></td>
+                                <td><%= menu.YEUTHICH %></td>
+                                <td>
+                                    <div class='d-grid gap-2 d-md-flex justify-content-md-end'>
+                                        
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#update<%= menu.TEN.replace(/ /g, '') %>">
+                                            Sửa 
+                                        </button>
+                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete<%= menu.TEN.replace(/ /g, '') %>">
+                                            Xoá 
+                                        </button>
+                                        
+                                    </div>
+                                </td>
+                            </tr>
+
+                            
+                    </tbody>
+                    <div class="modal fade" id="update<%= menu.TEN.replace(/ /g, '') %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Sửa món ăn / đồ uống</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form class="was-validated" action="/update-food-and-drink" method="POST">
+                                        <div class="row mb-4">
+                                            <div class="col-6">
+                                                <div class="form-floating">
+                                                    <input  type="text" class="form-control" placeholder="f&dname" name="name" value="<%= menu.TEN %>"  readonly>
+                                                    <label for="name">Tên món ăn / đồ uống</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-3">
+                                                <div class="form-floating">
+                                                    <input  type="text" class="form-control" placeholder="f&dversion" name="version" value="<%= menu.VERSION %>" readonly>
+                                                    <label for="version">Version</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-3">
+                                                <div class="form-floating">
+                                                    <input  type="text" class="form-control" placeholder="f&dprice" name="price" value="<%= menu.GIA %>" required>
+                                                    <label for="price">Giá</label>
+                                                    <div class="invalid-feedback">
+                                                        Vui lòng điền giá.
+                                                    </div>
+                                                    <div class="valid-feedback">
+                                                        OK.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>    
+                                        <div class="row mb-4">
+                                            <div class="col-6">
+                                                <div class="form-floating">
+                                                    <input  type="text" class="form-control" placeholder="f&dingredient" name="ingredient" value="<%= menu.NGUYENLIEU %>">
+                                                    <label for="ingredient">Nguyên liệu</label>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-3">
+                                                <div class="form-floating">
+                                                    <input  type="text" class="form-control" placeholder="f&ddate" name="date" value="<%= menu.NGAYTHEM.toLocaleDateString() %>"  readonly>
+                                                    <label for="date">Ngày thêm</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-3">
+                                                <div class="form-floating">
+                                                    <input  type="text" class="form-control" placeholder="f&dorigin" name="origin" >
+                                                    <label for="origin">Xuất xứ</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                
+                                        <div class=" mb-4">    
+                                            <textarea class="form-control" name="recipe" placeholder="Cách chế biến"  rows="7"></textarea>
+                                        </div>
+                                        
+                                        <div class="modal-footer">
+                                            <button type="button submit" id="updatefd" class="btn btn-primary">Sửa</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal fade" id="delete<%= menu.TEN.replace(/ /g, '') %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Xác nhận xoá món ăn / đồ uống</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="/delete-food-and-drink" method="POST" >
+                                        <div class="row mb-4">
+                                            <div class="col-6">
+                                                <div class="form-floating">
+                                                    <input  type="text" class="form-control" placeholder="f&dname" name="name" value="<%= menu.TEN %>"  readonly>
+                                                    <label for="name">Tên món ăn / đồ uống</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-3">
+                                                <div class="form-floating">
+                                                    <input  type="text" class="form-control" placeholder="f&dversion" name="version" value="<%= menu.VERSION %>" readonly>
+                                                    <label for="version">Version</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button submit" id="deletefd" class="btn btn-danger">Xoá</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+                </table>
+            
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <% if(page > 1) { %>
+                        <li class="page-item"><a class="page-link" href="/food-and-drink?page=<%=page-1%>&orderBy=<%=orderBy%>&orderDir=<%=orderDir%>" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+                        <% } %>
+                        <% for(let i = iterator; i <= endingLink; i++) { %>
+                        <% if(i === page) { %>
+                        <li class="page-item " aria-current="page"><a class="page-link" href="/food-and-drink?page=<%=i%>&orderBy=<%=orderBy%>&orderDir=<%=orderDir%>"><%= i %></a></li>
+                        <% continue; %>
+                        <% } %>
+                        <li class="page-item"><a class="page-link" href="/food-and-drink?page=<%=i%>&orderBy=<%=orderBy%>&orderDir=<%=orderDir%>"><%= i %></a></li>
+                        <% } %>
+                        <% if(page < numOfPages) { %> <li class="page-item"><a class="page-link" href="/food-and-drink?page=<%=page-1+2%>&orderBy=<%=orderBy%>&orderDir=<%=orderDir%>" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li> <% } %>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <script>
+ 
+        function vanish(){
+         $('#myAlert').fadeOut('fast');
+         $('#alert1').fadeOut('fast');
+         $('#alert2').fadeOut('fast');
+        }
+       
+        // $("#close").click(vanish)
+        // $("#close2").click(vanish)
+       
+        $(document).ready(function () {   
+          setTimeout(function () {
+            vanish()
+          }, 2000);
+        });
+
+        (() => {
+        'use strict'
+
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            const forms = document.querySelectorAll('.needs-validation')
+
+            // Loop over them and prevent submission
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+
+                form.classList.add('was-validated')
+                }, false)
+            })
+        })()
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script> -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>    
+</body>
+</html>
